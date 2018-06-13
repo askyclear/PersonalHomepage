@@ -11,7 +11,7 @@ import com.hudini.totalhomepage.service.UserService;
 
 /*
  * 회원가입과 관련된 api Controller 클래스
- * 작성날짜 : 2018.06.11 최종수정날짜 : 2018.06.11
+ * 작성날짜 : 2018.06.11 최종수정날짜 : 2018.06.13
  * 작성자 : 김대선
  */
 @RestController
@@ -38,9 +38,11 @@ public class SignUpApiController {
 	public String duplicationNickName(HttpServletRequest request, Model model){
 		String nickname = "";
 		nickname = request.getParameter("nickname");
+		
 		if(nickname == null || nickname.equals(""))
 			return "false";
 		int nicknameCount = userService.checkDuplicationNickName(nickname);
+		System.out.println("nickname : " + nickname + "count" + nicknameCount);
 		if(nicknameCount != 0){
 			return "false";
 		}

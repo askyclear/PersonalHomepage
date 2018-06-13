@@ -111,8 +111,8 @@
 						class="form-control-file" id="fileUpload">
 				</div>
 				<input type="submit" class="form-control btn btn-info" value="수정">
-				<br>
-				<input type="button" id="back" class="form-control btn btn-primary" value="목록">
+				<br> <input type="button" id="back"
+					class="form-control btn btn-primary" value="목록">
 				<script type="text/javascript">
 					var back_btn = document.getElementById("back");
 					back_btn

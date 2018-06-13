@@ -17,7 +17,7 @@ import com.hudini.totalhomepage.dto.UserDto;
 import static com.hudini.totalhomepage.dao.UserSqls.*;
 /*
  * User 관련 Data Access Object 
- * 작성날짜 : 2018.06.11 최종수정날짜 : 2018.06.11
+ * 작성날짜 : 2018.06.11 최종수정날짜 : 2018.06.13
  * 작성자 : 김대선
  */
 @Repository

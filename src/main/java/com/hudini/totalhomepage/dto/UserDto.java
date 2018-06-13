@@ -9,7 +9,7 @@ public class UserDto {
 	private String nickname;
 	private int userTypeId;
 	private Date createDate;
-	private Date lastLoginDate;
+	private Date lastloginDate;
 	public int getId() {
 		return id;
 	}
@@ -47,15 +47,15 @@ public class UserDto {
 		this.createDate = createDate;
 	}
 	public Date getLastLoginDate() {
-		return lastLoginDate;
+		return lastloginDate;
 	}
 	public void setLastLoginDate(Date lastLoginDate) {
-		this.lastLoginDate = lastLoginDate;
+		this.lastloginDate = lastLoginDate;
 	}
 	@Override
 	public String toString() {
 		return "UserDto [id=" + id + ", userId=" + userId + ", password=" + password + ", nickname=" + nickname
-				+ ", userTypeId=" + userTypeId + ", createDate=" + createDate + ", lastLoginDate=" + lastLoginDate
+				+ ", userTypeId=" + userTypeId + ", createDate=" + createDate + ", lastLoginDate=" + lastloginDate
 				+ "]";
 	}
 }

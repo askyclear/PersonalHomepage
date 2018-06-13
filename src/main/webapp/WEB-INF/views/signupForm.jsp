@@ -1,3 +1,4 @@
+<%@page import="com.fasterxml.jackson.annotation.JsonInclude.Include"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -16,6 +17,7 @@
 </head>
 
 <body>
+	
 	<header> <nav class="navbar navbar-inverse">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -70,7 +72,7 @@
 			<div>
 				<h2>회원가입 화면</h2>
 			</div>
-			<form action="/login.do" method="post" name="signupform" onsubmit="return check()">
+			<form action="${pageContext.request.contextPath }/signup/signup.do" method="post" name="signupform" onsubmit="return check()">
 				<div class="form-group row">
 					<label for="userId" class="col-sm-2 col-form-labe"><b>아이디</b></label>
 					<div class="col-sm-8">
@@ -122,19 +124,6 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="js/signupcheck.js"></script>
-	<script type="text/javascript">
-		var passwordEle = document.getElementById("password");
-		var passwordConfirmEle = document.getElementById("passwordConfirm");
-		var passwordCheckEle = document.querySelector(".password_check_block");
-		passwordEle.addEventListener("keyup", function(evt) {
-			checkPasswordAndView(passwordConfirmEle, evt.target,
-					passwordCheckEle);
-		});
-		passwordConfirmEle.addEventListener("keyup", function(evt) {
-			checkPasswordAndView(evt.target, passwordEle, passwordCheckEle);
-
-		});
-		 
-	</script>
+	<script type="text/javascript" src="js/onLoad.js"></script>
 </body>
 </html>

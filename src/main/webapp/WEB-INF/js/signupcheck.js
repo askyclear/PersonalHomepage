@@ -1,7 +1,7 @@
 /**
  * signup form의 각종 check function 등 
- * 작성날짜 : 2018.06.12 최종수정날짜 : 2018.06.12 작성자 :
- * 김대선
+ * 작성날짜 : 2018.06.12 최종수정날짜 : 2018.06.13 
+ * 작성자 : 김대선
  */
 function checkPasswordAndView(targetEle, confirmEle, viewEle) {
 	if (targetEle.value === confirmEle.value && confirmEle.value != "") {
@@ -15,11 +15,22 @@ function checkPasswordAndView(targetEle, confirmEle, viewEle) {
 	}
 }
 function check() {
-	if (document.signupform.userId.value == "") {
+	var idbtn = document.getElementById("duplicationConfirmId");
+	var nickbtn = document.getElementById("duplicationConfirmNickname");
+	
+	if (	document.signupform.userId.value == "") {
+		alert("아이디를 입력해주세요");	
+		return false;
+	}
+	if(!idbtn.classList.contains("confirmok")){
 		alert("아이디 중복확인을 해주세요");
 		return false;
 	}
 	if (document.signupform.nickname == "") {
+		alert("닉네임을 입력해주세요");
+		return false;
+	}
+	if(!nickbtn.classList.contains("confirmok")){
 		alert("닉네임 중복확인을 해주세요");
 		return false;
 	}
