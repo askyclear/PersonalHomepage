@@ -80,4 +80,11 @@ public class UserDao {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
 		return insertAction.execute(param);
 	}
+
+	public int selectCountByUserIdAndPassword(String userId, String password) {
+		Map<String, String> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("password", password);
+		return jdbc.queryForObject("SELECT COUNT(*) FROM user WHERE user_id = :userId AND password = :password", params, Integer.class);
+	}
 }

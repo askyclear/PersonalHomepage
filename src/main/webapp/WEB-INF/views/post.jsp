@@ -58,8 +58,18 @@
 						class="nav_title">설정</span></a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="${pageContext.request.contextPath }/login"><span
-						class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<c:if test="${empty sessionScope.isLogined }">
+					<li><a href="${pageContext.request.contextPath }/login"><span
+							class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</c:if>
+				<c:if test="${not empty sessionScope.isLogined }">
+					<li><a href="${pageContext.request.contextPath }/setting">${sessionScope.user.nickname }님
+							환영합니다 </a></li>
+					<li><a
+						href="${pageContext.request.contextPath }/login/logout.do"><span
+							class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+
+				</c:if>
 			</ul>
 		</div>
 	</div>
@@ -135,7 +145,7 @@
 					글쓰기</button>
 				<ul class="pagination">
 					<li class="left"><span> < </span></li>
-					
+
 					<c:forEach var="i" begin="1" end="${pageCount }" step="1">
 						<c:choose>
 							<c:when test="${i } == ${curPage }">
@@ -147,10 +157,10 @@
 									href="${pageContext.request.contextPath }/board?boardCategoryId=${boardCategoryId }&page=${i }">${i }</a></li>
 							</c:otherwise>
 						</c:choose>
-						
+
 					</c:forEach>
 					<li class="right"><span> > </span></li>
-					
+
 				</ul>
 				<script type="text/javascript">
 					var write_btn = document.getElementById("write_btn");
@@ -159,15 +169,22 @@
 									"click",
 									function(evt) {
 										window.location.href = '${pageContext.request.contextPath }'
-												+ '/board/write?boardCegoryId=' + '${boardCategoryId }';
+												+ '/board/write?boardCegoryId='
+												+ '${boardCategoryId }';
 									});
 					var boards = document.getElementById("board-content");
-					boards.addEventListener("click",function(evt){
-						id = evt.target.parentElement.firstElementChild.innerText;
-						window.location.href = '${pageContext.request.contextPath }'
-							+ '/board/read.do?boardIndex=' + id + '&boardCegoryId=' + '${boardCategoryId }';
+					boards
+							.addEventListener(
+									"click",
+									function(evt) {
+										id = evt.target.parentElement.firstElementChild.innerText;
+										window.location.href = '${pageContext.request.contextPath }'
+												+ '/board/read.do?boardIndex='
+												+ id
+												+ '&boardCegoryId='
+												+ '${boardCategoryId }';
 
-					});
+									});
 				</script>
 			</div>
 		</div>

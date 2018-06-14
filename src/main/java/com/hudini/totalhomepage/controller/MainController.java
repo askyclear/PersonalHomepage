@@ -2,6 +2,10 @@ package com.hudini.totalhomepage.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hudini.totalhomepage.dto.BoardDto;
 import com.hudini.totalhomepage.dto.CategoryDto;
@@ -20,7 +25,7 @@ import com.hudini.totalhomepage.service.UserService;
 /*
  * Main View관련 Controller
  * 생성날짜 : 18.06.07
- * 최종수정날짜 : 18.06.13 
+ * 최종수정날짜 : 18.06.14 
  * 작성자 : 김대선
  */
 @Controller
@@ -69,11 +74,49 @@ public class MainController {
 		modelAndView.setViewName("photo");
 		return modelAndView;
 	}
+	/**
+	 * 로그인폼을 호출함
+	 * @param modelAndView
+	 * @return
+	 */
 	@RequestMapping(path = {"/login"})
-	public ModelAndView login(ModelAndView modelAndView){
+	public ModelAndView loginForm(ModelAndView modelAndView){
 		List<CategoryDto> boardCategories = postService.readCategories();
 		modelAndView.addObject("categories", boardCategories);
 		modelAndView.setViewName("loginForm");
+		return modelAndView;
+	}
+	
+	@PostMapping(path = {"/login/login.do"})
+	public ModelAndView login(@RequestParam(name="userId",required=true) String userId, 
+			@RequestParam(name="password", required=true) String password,
+			RedirectAttributes redirectAttr,
+			ModelAndView modelAndView,HttpServletRequest request,
+			HttpServletResponse response){
+		HttpSession session = request.getSession();
+		int isUser= userService.checkUser(userId, password);
+		if(isUser == 1){
+			UserDto user = userService.getUser(userId, password);
+			session.setAttribute("isLogined", true);
+			session.setAttribute("user", user);
+			modelAndView.setViewName("redirect:/main");
+		}
+		else{
+			redirectAttr.addFlashAttribute("errorMessage", "아이디나 비밀번호를 확인하세요");
+			redirectAttr.addFlashAttribute("userId",userId);
+			redirectAttr.addFlashAttribute("password",password);
+			modelAndView.setViewName("redirect:../login");
+		}
+		return modelAndView;
+	}
+	@RequestMapping(path = {"/login/logout.do"})
+	public ModelAndView logout(
+			ModelAndView modelAndView,HttpServletRequest request,
+			HttpServletResponse response){
+		HttpSession session = request.getSession();
+		session.removeAttribute("user");
+		session.removeAttribute("isLogined");
+		modelAndView.setViewName("redirect:/main");
 		return modelAndView;
 	}
 	@RequestMapping(path = {"/signup"})
@@ -88,16 +131,11 @@ public class MainController {
 		if(result != 1){
 			modelAndView.setViewName("signupForm");
 		}else{
-			modelAndView.setViewName("main");
+			modelAndView.setViewName("login");
 		}
 		return modelAndView;
 	}
 	
-	@RequestMapping(path = {"/header"})
-	public ModelAndView header(ModelAndView modelAndView){
-		modelAndView.setViewName("header");
-		return modelAndView;
-	}
 	@RequestMapping(path = {"/setting"})
 	public ModelAndView setting(ModelAndView modelAndView){
 		List<CategoryDto> boardCategories = postService.readCategories();

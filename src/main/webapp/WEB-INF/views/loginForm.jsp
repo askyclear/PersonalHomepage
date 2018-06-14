@@ -58,8 +58,15 @@
 						class="nav_title">설정</span></a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
+				<c:if test="${empty sessionScope.isLogined }">
 				<li><a href="${pageContext.request.contextPath }/login"><span
 						class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</c:if>
+				<c:if test="${not empty sessionScope.isLogined }">
+					<li><span>${sessionScope.id }님 환영합니다</span><a href="${pageContext.request.contextPath }/login/logout.do"><span
+						class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+						
+				</c:if>
 			</ul>
 		</div>
 	</div>
@@ -69,12 +76,12 @@
 			<div>
 				<h2>로그인 화면</h2>
 			</div>
-			<form action="/login.do" method="post">
+			<form action="login/login.do" method="post">
 				<div class="form-group row">
 					<label for="userId" class="col-sm-2 col-form-labe"><b>아이디</b></label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" placeholder="아이디를 입력하세요."
-							name="userId" required>
+							name="userId" required value="${userId }">
 					</div>
 				</div>
 				
@@ -82,7 +89,7 @@
 					<label for="password" class="col-sm-2 col-form-labe"><b>비밀번호</b></label>
 					<div class="col-sm-10">
 						<input type="password" class="form-control"
-							placeholder="비밀번호를 입력하세요." name="password" required>
+							placeholder="비밀번호를 입력하세요." name="password" required value="${password }">
 					</div>
 				</div>
 				<div class="form-gorup">
@@ -100,5 +107,10 @@
 			</form>
 		</div>
 	</div>
+	<% String isError =(String) request.getAttribute("errorMessage");
+		if(isError != null){
+			out.println("<script> alert('" + isError + "')</script>");
+		}
+	%>
 </body>
 </html>

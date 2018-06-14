@@ -58,8 +58,18 @@
 						class="nav_title">설정</span></a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="${pageContext.request.contextPath }/login"><span
-						class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				<c:if test="${empty sessionScope.isLogined }">
+					<li><a href="${pageContext.request.contextPath }/login"><span
+							class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</c:if>
+				<c:if test="${not empty sessionScope.isLogined }">
+					<li><a href="${pageContext.request.contextPath }/setting">${sessionScope.user.nickname }님
+							환영합니다 </a></li>
+					<li><a
+						href="${pageContext.request.contextPath }/login/logout.do"><span
+							class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+
+				</c:if>
 			</ul>
 		</div>
 	</div>
