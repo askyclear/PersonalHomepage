@@ -99,7 +99,14 @@ public class MainController {
 			UserDto user = userService.getUser(userId, password);
 			session.setAttribute("isLogined", true);
 			session.setAttribute("user", user);
-			modelAndView.setViewName("redirect:/main");
+			String prePage = (String) session.getAttribute("prePage");
+			if(prePage != null){
+				modelAndView.setViewName("redirect:" + prePage);
+				session.removeAttribute("prePage");
+			}
+			else{
+				modelAndView.setViewName("redirect:/main");
+			}
 		}
 		else{
 			redirectAttr.addFlashAttribute("errorMessage", "아이디나 비밀번호를 확인하세요");
@@ -131,7 +138,7 @@ public class MainController {
 		if(result != 1){
 			modelAndView.setViewName("signupForm");
 		}else{
-			modelAndView.setViewName("login");
+			modelAndView.setViewName("loginForm");
 		}
 		return modelAndView;
 	}

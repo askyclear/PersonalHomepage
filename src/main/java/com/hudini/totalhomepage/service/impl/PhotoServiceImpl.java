@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.hudini.totalhomepage.dto.CategoryDto;
+import com.hudini.totalhomepage.dto.FileInfoDto;
 import com.hudini.totalhomepage.dto.PhotoDto;
 import com.hudini.totalhomepage.service.BoardService;
 
@@ -24,7 +25,7 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 	}
 
 	@Override
-	public int write(PhotoDto boardDto) {
+	public int write(PhotoDto boardDto, int fileId) {
 		// TODO Auto-generated method stub
 		return 6666;
 	}
@@ -43,6 +44,12 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 
 	@Override
 	public int pageCount(int categoryId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int addFile(FileInfoDto fileInfo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

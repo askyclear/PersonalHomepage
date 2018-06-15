@@ -11,6 +11,7 @@ public class BoardDto {
 	private int id;
 	private int boardCategoryId;
 	private int userId;
+	private UserDto userInfo;
 	private String title;
 	private String content;
 	private Date createDate;
@@ -65,11 +66,17 @@ public class BoardDto {
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
 	}
+	
+	public UserDto getUserInfo() {
+		return userInfo;
+	}
+	public void setUserInfo(UserDto userInfo) {
+		this.userInfo = userInfo;
+	}
 	@Override
 	public String toString() {
 		return "BoardDto [id=" + id + ", boardCategoryId=" + boardCategoryId + ", userId=" + userId + ", title=" + title
 				+ ", content=" + content + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", viewCount="
 				+ viewCount + "]";
 	}
-	
 }

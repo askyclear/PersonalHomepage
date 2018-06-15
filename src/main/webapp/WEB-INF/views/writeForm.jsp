@@ -75,7 +75,7 @@
 	</nav> </header>
 	<div class="container-fluid text-center">
 		<form action="${pageContext.request.contextPath }/board/write.do"
-			method="post">
+			method="post" enctype="multipart/form-data" >
 			<div class="form-group">
 				<table class="table table-striped table-hover">
 					<thead>
@@ -126,13 +126,20 @@
 
 				<div class="form-group text-left">
 					<label for="fileUpload">첨부파일</label> <input type="file"
-						class="form-control-file" id="fileUpload">
+						class="form-control-file" id="fileUpload" name="fileUpload"><!-- image만 올릴때는 accept="image/png,image/jpeg" -->
 				</div>
 				<input type="submit" class="form-control btn btn-primary" value="확인">
-
+				
 
 			</div>
 		</form>
 	</div>
+	<script type="text/javascript">
+		const elFile = document.getElementById("fileUpload");
+		elFile.addEventListener("change", function(){
+			const image = evt.target.files[0];
+			// ele.src = window.URL.createObjectURL(image); 로 썸네일 보여줌;
+		});
+	</script>
 </body>
 </html>

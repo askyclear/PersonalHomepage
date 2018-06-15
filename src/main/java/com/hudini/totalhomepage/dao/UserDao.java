@@ -85,6 +85,12 @@ public class UserDao {
 		Map<String, String> params = new HashMap<>();
 		params.put("userId", userId);
 		params.put("password", password);
-		return jdbc.queryForObject("SELECT COUNT(*) FROM user WHERE user_id = :userId AND password = :password", params, Integer.class);
+		return jdbc.queryForObject(SELECTCOUNT_BY_USERIDANDPASSWORD, params, Integer.class);
+	}
+
+	public UserDto selectById(int userId) {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("id", userId);
+		return jdbc.queryForObject(SELECT_BY_ID, params,rowMapper);
 	}
 }

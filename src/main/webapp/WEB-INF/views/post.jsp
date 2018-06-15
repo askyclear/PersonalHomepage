@@ -133,7 +133,7 @@
 							<tr class="board">
 								<td>${board.id }</td>
 								<td>${board.title }</td>
-								<td>Hudini</td>
+								<td>${board.userInfo.nickname }</td>
 								<td>${board.modifyDate }</td>
 								<td>${board.viewCount }</td>
 							</tr>

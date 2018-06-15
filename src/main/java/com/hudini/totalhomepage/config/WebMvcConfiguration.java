@@ -3,6 +3,8 @@ package com.hudini.totalhomepage.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 /*
  * Sping MVC에서의 각종 cofiguraion 설정
  * 작성날짜 : 18.06.06
+ * 최종수정날짜 : 18.06.15
  * 작성자 : 김대선
  */
 @Configuration
@@ -28,6 +31,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter{
 		registry.addResourceHandler("/img/*").addResourceLocations("/WEB-INF/img/").setCachePeriod(cachePeriod);
 		registry.addResourceHandler("/js/*").addResourceLocations("/WEB-INF/js/").setCachePeriod(cachePeriod);
 		registry.addResourceHandler("/fonts/*").addResourceLocations("/WEB-INF/fonts/").setCachePeriod(cachePeriod);
+		registry.addResourceHandler("/boardFile/*").addResourceLocations("/boardFile/").setCachePeriod(cachePeriod);
 	}
 
 	//
@@ -61,10 +65,10 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter{
 	 * upload 관련 Bean 생성 메소드 
 	 * @return
 	 */
-//	@Bean
-//	public MultipartResolver mutilpartResolver(){
-//		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//		multipartResolver.setMaxUploadSize(1024 * 1024 * 10);
-//		return multipartResolver;
-//	}
+	@Bean
+	public MultipartResolver mutilpartResolver(){
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(1024 * 1024 * 10); //10MB 까지 업로드 가능
+		return multipartResolver;
+	}
 }

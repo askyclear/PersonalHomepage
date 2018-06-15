@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import com.hudini.totalhomepage.dto.BoardDto;
+import com.hudini.totalhomepage.dto.BoardFileDto;
 import com.hudini.totalhomepage.dto.CategoryDto;
 
 /*
@@ -31,13 +32,15 @@ import com.hudini.totalhomepage.dto.CategoryDto;
 @Repository
 public class BoardDao {
 	private NamedParameterJdbcTemplate jdbc;
-	private SimpleJdbcInsert insertAction;
+	private SimpleJdbcInsert insertBoard;
+	private SimpleJdbcInsert insertBoardFile;
 	private RowMapper<BoardDto> boardRowMapper = BeanPropertyRowMapper.newInstance(BoardDto.class);
 	private RowMapper<CategoryDto> categoryRowMapper = BeanPropertyRowMapper.newInstance(CategoryDto.class);
-
+	private RowMapper<BoardFileDto> boardFileRowMapper = BeanPropertyRowMapper.newInstance(BoardFileDto.class);
 	public BoardDao(DataSource dataSource) {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
-		this.insertAction = new SimpleJdbcInsert(dataSource).withTableName("board").usingGeneratedKeyColumns("id");
+		this.insertBoard = new SimpleJdbcInsert(dataSource).withTableName("board").usingGeneratedKeyColumns("id");
+		this.insertBoardFile = new SimpleJdbcInsert(dataSource).withTableName("board_file").usingGeneratedKeyColumns("id");
 	}
 
 	/**
@@ -85,7 +88,8 @@ public class BoardDao {
 	 */
 	public int insert(BoardDto board) {
 		SqlParameterSource params = new BeanPropertySqlParameterSource(board);
-		return insertAction.execute(params);
+		Number id = insertBoard.executeAndReturnKey(params);
+		return id.intValue();
 	}
 
 	/**
@@ -122,6 +126,12 @@ public class BoardDao {
 			params.put("boardCategoryId", boardCateogryId);
 			return jdbc.queryForObject(SELECT_COUNT_BY_CATEGORI_ID, params, Integer.class);
 		}
+	}
+
+	public int insertBoardFile(BoardFileDto boardFile) {
+		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(boardFile);
+		Number number = insertBoardFile.executeAndReturnKey(parameterSource);
+		return number.intValue();
 	}
 
 }
