@@ -1,10 +1,12 @@
 package com.hudini.totalhomepage.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hudini.totalhomepage.dao.BoardDao;
 import com.hudini.totalhomepage.dao.FileInfoDao;
@@ -17,7 +19,7 @@ import com.hudini.totalhomepage.service.BoardService;
 
 /*
  * 게시판 글 작성 Service
- * 작성날짜 : 2018.06.08   최종수정날짜 : 2018.06.14
+ * 작성날짜 : 2018.06.08   최종수정날짜 : 2018.06.18
  * 작성자 : 김대선
  */
 @Service("postService")
@@ -51,6 +53,7 @@ public class PostServiceImpl implements BoardService<BoardDto> {
 	 *            userId positive Integer type,
 	 * @return success 1 return
 	 */
+	@Transactional
 	@Override
 	public int write(BoardDto t, int fileId) {
 		if (t.getUserId() == 0) {
@@ -118,12 +121,37 @@ public class PostServiceImpl implements BoardService<BoardDto> {
 			return pageCount + 1;
 		}
 	}
-
+	@Transactional
 	@Override
 	public int addFile(FileInfoDto fileInfo) {
 		fileInfo.setCreateDate(new Date());
 		fileInfo.setModifyDate(new Date());
 		return fileDao.insert(fileInfo);
 	}
+	
+	@Override
+	public List<FileInfoDto> readFiles(int id) {
+		List<BoardFileDto> board_files = boardDao.selectBoardFileByBoardId(id);
+		List<FileInfoDto> file_infos = new ArrayList<>(); 
+		for(BoardFileDto boardFileDto : board_files){
+			int file_id = boardFileDto.getFileId();
+			file_infos.add(fileDao.selectById(file_id));
+		}
+		return file_infos;
+	}
 
+	@Override
+	public FileInfoDto readFile(int boardId, String fileName) {
+		List<BoardFileDto> board_files = boardDao.selectBoardFileByBoardId(boardId);
+		 
+		for(BoardFileDto boardFileDto : board_files){
+			int file_id = boardFileDto.getFileId();
+			FileInfoDto file_info =fileDao.selectById(file_id);
+			if(file_info.getFileName().equals(fileName)){
+				return file_info;
+			}
+		}
+		return null;
+	}
+	
 }

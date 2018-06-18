@@ -13,4 +13,6 @@ public interface BoardService <T>{
 	public T read(int id);
 	public int pageCount(int categoryId);
 	public int addFile(FileInfoDto fileInfo);
+	public List<FileInfoDto> readFiles(int id);
+	public FileInfoDto readFile(int boardId, String fileName);
 }

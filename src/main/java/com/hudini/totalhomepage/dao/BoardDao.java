@@ -26,7 +26,7 @@ import com.hudini.totalhomepage.dto.CategoryDto;
  * 게시판 목록 조회 by categoryId
  * 게시판 글삭제 by index,
  * 생성날짜 : 18.06.06
- * 최종수정날짜 : 18.06.06 
+ * 최종수정날짜 : 18.06.18
  * 작성자 : 김대선
  */
 @Repository
@@ -127,11 +127,25 @@ public class BoardDao {
 			return jdbc.queryForObject(SELECT_COUNT_BY_CATEGORI_ID, params, Integer.class);
 		}
 	}
-
+	/**
+	 * 하나의 게시판에 연관된 첨부파일 정보 관련 입력
+	 * @param boardFile  게시판에 연결된 파일의 데이터
+	 * @return 성공시 1 리턴
+	 */
 	public int insertBoardFile(BoardFileDto boardFile) {
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(boardFile);
 		Number number = insertBoardFile.executeAndReturnKey(parameterSource);
 		return number.intValue();
+	}
+	/**
+	 * 게시판과 연계된 정보 불러오기
+	 * @param id  boardId
+	 * @return
+	 */
+	public List<BoardFileDto> selectBoardFileByBoardId(int boardId) {
+		Map<String, Integer> params = new HashMap<>();
+		params.put("boardId", boardId);
+		return jdbc.query("SELECT file_id FROM board_file WHERE board_id = :boardId", params, boardFileRowMapper);
 	}
 
 }

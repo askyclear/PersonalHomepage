@@ -9,6 +9,9 @@ import com.hudini.totalhomepage.dto.FileInfoDto;
 import com.hudini.totalhomepage.dto.PhotoDto;
 import com.hudini.totalhomepage.service.BoardService;
 
+/*
+ * 
+ */
 @Service("photoService")
 public class PhotoServiceImpl implements BoardService<PhotoDto> {
 
@@ -54,6 +57,16 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 		return 0;
 	}
 
-	
+	@Override
+	public List<FileInfoDto> readFiles(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FileInfoDto readFile(int boardId, String fileName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

@@ -117,8 +117,11 @@
 				</table>
 
 				<div class="form-group text-left">
-					<label for="fileUpload">첨부파일</label> <input type="button"
-						class="form-control-file" id="fileUpload">
+					<label for="fileUpload">첨부파일</label>
+					<c:forEach items="${boardFiles }" var="boardFile">
+						<a
+							href="${pageContext.request.contextPath }/board/${boardFile.fileName }/${board.id }"><span>${boardFile.fileName }</span></a>
+					</c:forEach>
 				</div>
 				<input type="submit" class="form-control btn btn-info" value="수정">
 				<br> <input type="button" id="back"
