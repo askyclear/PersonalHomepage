@@ -25,7 +25,7 @@ import com.hudini.totalhomepage.service.UserService;
 /*
  * Main View관련 Controller
  * 생성날짜 : 18.06.07
- * 최종수정날짜 : 18.06.14 
+ * 최종수정날짜 : 18.06.18 
  * 작성자 : 김대선
  */
 @Controller

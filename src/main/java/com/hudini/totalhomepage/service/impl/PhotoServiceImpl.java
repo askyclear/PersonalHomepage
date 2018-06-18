@@ -68,5 +68,11 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int viewCountPlus(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

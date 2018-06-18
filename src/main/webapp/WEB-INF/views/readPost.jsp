@@ -88,7 +88,7 @@
 										<c:forEach items="${categories }" var="category">
 											<c:if test="${category.id eq board.boardCategoryId }">
 												<input type="text" readonly="readonly"
-													name="boardCategoryId" class="form-control"
+													name="boardCategoryId" class="form-control" style="background-color:#FFFFFF"
 													value="${category.name }">
 											</c:if>
 										</c:forEach>
@@ -99,7 +99,7 @@
 								<div class="form-group row">
 									<label for="title" class="col-sm-2 col-form-labe">제목</label>
 									<div class="col-sm-10">
-										<input id="title" class="form-control" type="text"
+										<input id="title" class="form-control" type="text" style="background-color:#FFFFFF"
 											readonly="readonly" name="title" value="${board.title }">
 									</div>
 								</div>
@@ -110,8 +110,8 @@
 						<tr>
 							<td colspan="4"><label for="content"
 								class="col-sm-1 col-form-labe">내용</label> <textarea
-									class="form-control" id="content" name="content" rows="10"
-									style="resize: none">${board.content }</textarea></td>
+									class="form-control" id="content" name="content" rows="10" readonly="readonly"
+									style="resize: none; background-color:#FFFFFF">${board.content }</textarea></td>
 						</tr>
 					</tbody>
 				</table>
@@ -123,6 +123,7 @@
 							href="${pageContext.request.contextPath }/board/${boardFile.fileName }/${board.id }"><span>${boardFile.fileName }</span></a>
 					</c:forEach>
 				</div>
+				<input type="text" style="display:none;" name="id" value="${board.id }">
 				<input type="submit" class="form-control btn btn-info" value="수정">
 				<br> <input type="button" id="back"
 					class="form-control btn btn-primary" value="목록">
@@ -137,6 +138,13 @@
 												+ '${preCategoryId }';
 									});
 				</script>
+				<script>
+					var isYourBoard = '${isYourBoard }';
+					if(isYourBoard  == 'N'){
+						alert('자신의 글이 아닙니다.');
+					}
+				</script>
+				
 			</div>
 		</form>
 	</div>

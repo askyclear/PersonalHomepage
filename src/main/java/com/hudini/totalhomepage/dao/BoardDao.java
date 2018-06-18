@@ -1,7 +1,14 @@
 package com.hudini.totalhomepage.dao;
 
-import static com.hudini.totalhomepage.dao.BoardSqls.*;
+import static com.hudini.totalhomepage.dao.BoardSqls.SELECT_BY_CATEGORY_ID;
+import static com.hudini.totalhomepage.dao.BoardSqls.SELECT_BY_ID;
+import static com.hudini.totalhomepage.dao.BoardSqls.SELECT_BY_PAGE;
+import static com.hudini.totalhomepage.dao.BoardSqls.SELECT_CATEGORIES;
+import static com.hudini.totalhomepage.dao.BoardSqls.SELECT_COUNT;
+import static com.hudini.totalhomepage.dao.BoardSqls.SELECT_COUNT_BY_CATEGORI_ID;
+
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,9 +105,14 @@ public class BoardDao {
 	 * @param
 	 * @return
 	 */
-	public BoardDto update(BoardDto t) {
-		// TODO Auto-generated method stub
-		return null;
+	public int update(BoardDto t) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("title", t.getTitle());
+		params.put("content", t.getContent());
+		params.put("modifyDate", new Date());
+		params.put("id", t.getId());
+		params.put("boardCategoryId", t.getBoardCategoryId());
+		return jdbc.update("UPDATE board SET title=:title, content=:content, modify_date=:modifyDate, board_category_id=:boardCategoryId WHERE id=:id", params);
 	}
 
 	/**
@@ -147,5 +159,9 @@ public class BoardDao {
 		params.put("boardId", boardId);
 		return jdbc.query("SELECT file_id FROM board_file WHERE board_id = :boardId", params, boardFileRowMapper);
 	}
-
+	public int updateViewCountById(int id){
+		Map<String, Integer> paramMap = new HashMap<>();
+		paramMap.put("id", id);
+		return jdbc.update("UPDATE board SET view_count=view_count + 1 where id=:id", paramMap);
+	}
 }

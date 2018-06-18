@@ -74,71 +74,112 @@
 	</div>
 	</nav> </header>
 	<div class="container-fluid text-center">
-		<form action="${pageContext.request.contextPath }/board/write.do"
-			method="post" enctype="multipart/form-data" >
-			<div class="form-group">
-				<table class="table table-striped table-hover">
-					<thead>
-						<tr>
-							<td colspan="2">
-								<div class="form-group row">
-									<label for="category-select" class="col-sm-4 col-form-labe">카테고리</label>
-									<div class="col-sm-6">
-										<select class="form-control" id="category-select"
-											name="boardCategoryId">
-											<c:forEach items="${categories }" var="category">
-												<c:if test="${category.id != 0 }">
-													<c:choose>
-														<c:when test="${category.id eq curCategory }">
-															<option value="${category.id }" selected>${category.name }</option>
-														</c:when>
-														<c:otherwise>
-															<option value="${category.id }">${category.name }</option>
-														</c:otherwise>
-													</c:choose>
-												</c:if>
-											</c:forEach>
-										</select>
-									</div>
+		<c:choose>
+			<c:when test="${not empty board }">
+				<form
+					action="${pageContext.request.contextPath }/board/update/update.do"
+					method="post" enctype="multipart/form-data">
+			</c:when>
+			<c:otherwise>
+				<form action="${pageContext.request.contextPath }/board/write.do"
+					method="post" enctype="multipart/form-data">
+			</c:otherwise>
+		</c:choose>
+		<div class="form-group">
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<td colspan="2">
+							<div class="form-group row">
+								<label for="category-select" class="col-sm-4 col-form-labe">카테고리</label>
+								<div class="col-sm-6">
+									<select class="form-control" id="category-select"
+										name="boardCategoryId">
+										<c:forEach items="${categories }" var="category">
+											<c:if test="${category.id != 0 }">
+												<c:choose>
+													<c:when test="${category.id eq curCategory }">
+														<option value="${category.id }" selected>${category.name }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${category.id }">${category.name }</option>
+													</c:otherwise>
+												</c:choose>
+											</c:if>
+										</c:forEach>
+									</select>
 								</div>
-							</td>
-							<td colspan="2">
-								<div class="form-group row">
-									<label for="title" class="col-sm-2 col-form-labe">제목</label>
-									<div class="col-sm-10">
-										<input id="title" class="form-control" type="text"
-											name="title" placeholder="제목을 입력하세요" required>
-									</div>
+							</div>
+						</td>
+						<td colspan="2">
+							<div class="form-group row">
+								<label for="title" class="col-sm-2 col-form-labe">제목</label>
+								<div class="col-sm-10">
+									<input id="title" class="form-control" type="text" name="title"
+										placeholder="제목을 입력하세요" required value="${board.title }">
 								</div>
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td colspan="4"><label for="content"
-								class="col-sm-1 col-form-labe">내용</label> <textarea
-									class="form-control" id="content" name="content" rows="10"
-									placeholder="내용을 입력하세요." required style="resize: none"></textarea>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							</div>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="4"><label for="content"
+							class="col-sm-1 col-form-labe">내용</label> <textarea
+								class="form-control" id="content" name="content" rows="10"
+								placeholder="내용을 입력하세요." required style="resize: none">${board.content }</textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 
-				<div class="form-group text-left">
-					<label for="fileUpload">첨부파일</label> <input type="file"
-						class="form-control-file" id="fileUpload" name="fileUpload"><!-- image만 올릴때는 accept="image/png,image/jpeg" -->
-				</div>
-				<input type="submit" class="form-control btn btn-primary" value="확인">
-				
 
-			</div>
+			<c:choose>
+				<c:when test="${not empty board }">
+					<div class="form-group text-left">
+						<label for="fileUpload">첨부파일</label> 
+						<input type="file"
+							class="form-control-file" id="fileUpload" name="fileUpload" style="display:none">
+						<c:forEach items="${fileInfo }" var="boardFile">
+						<a
+							href="${pageContext.request.contextPath }/board/${boardFile.fileName }/${board.id }"><span>${boardFile.fileName }</span></a>
+					</c:forEach>
+						<!-- image만 올릴때는 accept="image/png,image/jpeg" -->
+					</div>
+					<input type="text" style="display: none;" name="id"
+						value="${board.id }">
+					<input type="submit" class="form-control btn btn-info"
+						value="수정">
+						<input type="button" class="form-control btn btn-primary" id="cancleBtn"
+						value="취소">
+				</c:when>
+				<c:otherwise>
+					<div class="form-group text-left">
+						<label for="fileUpload">첨부파일</label> <input type="file"
+							class="form-control-file" id="fileUpload" name="fileUpload">
+						<!-- image만 올릴때는 accept="image/png,image/jpeg" -->
+					</div>
+					<input type="submit" class="form-control btn btn-primary"
+						value="확인">
+				</c:otherwise>
+			</c:choose>
+
+
+
+		</div>
 		</form>
 	</div>
 	<script type="text/javascript">
 		const elFile = document.getElementById("fileUpload");
-		elFile.addEventListener("change", function(){
+		elFile.addEventListener("change", function() {
 			const image = evt.target.files[0];
 			// ele.src = window.URL.createObjectURL(image); 로 썸네일 보여줌;
+		});
+	</script>
+	<script type="text/javascript">
+		const cancleBt = document.getElementById("cancleBtn");
+		cancleBt.addEventListener("click", function(){
+			window.location.href = "${pageContext.request.contextPath }/board/read.do?boardIndex=${board.id }&boardCegoryId=${curCategory }";
 		});
 	</script>
 </body>

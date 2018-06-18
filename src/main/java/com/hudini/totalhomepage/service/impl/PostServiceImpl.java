@@ -92,8 +92,13 @@ public class PostServiceImpl implements BoardService<BoardDto> {
 	 * @param t
 	 */
 	@Override
+	@Transactional
 	public BoardDto modify(BoardDto t) {
-		BoardDto board = boardDao.update(t);
+		int result = boardDao.update(t);
+		BoardDto board = new BoardDto();
+		if(result >= 1){
+			board = boardDao.selectById(t.getId());
+		}
 		return board;
 	}
 
@@ -152,6 +157,12 @@ public class PostServiceImpl implements BoardService<BoardDto> {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public int viewCountPlus(int id) {
+		
+		return boardDao.updateViewCountById(id);
 	}
 	
 }

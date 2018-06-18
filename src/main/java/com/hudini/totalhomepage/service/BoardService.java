@@ -15,4 +15,5 @@ public interface BoardService <T>{
 	public int addFile(FileInfoDto fileInfo);
 	public List<FileInfoDto> readFiles(int id);
 	public FileInfoDto readFile(int boardId, String fileName);
+	public int viewCountPlus(int id);
 }
