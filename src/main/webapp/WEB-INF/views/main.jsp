@@ -36,7 +36,7 @@
 					data-toggle="dropdown" href="#"> <span class="nav_title">게시판</span>
 				</a>
 					<ul class="dropdown-menu" id="board-categories">
-						<c:forEach items="${categories }" var="category">
+						<c:forEach items="${boardcategories }" var="category">
 							<c:choose>
 								<c:when test="${category.id eq boardCategoryId }">
 									<li class="active"><a
@@ -52,9 +52,20 @@
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#"> <span class="nav_title">사진첩</span></a>
 					<ul class="dropdown-menu" id="photo-categories">
-						<li><a href="${pageContext.request.contextPath }/album">전체보기</a></li>
+						<c:forEach items="${albumcategories }" var="category">
+							<c:choose>
+								<c:when test="${category.id eq boardCategoryId }">
+									<li class="active"><a
+										href="${pageContext.request.contextPath }/album?albumCategoryId=${category.id }">${category.name }</a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath }/album?albumCategoryId=${category.id }">${category.name }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
 					</ul></li>
-				<li><a href="${pageContext.request.contextPath }"><span
+				<li><a href="${pageContext.request.contextPath }/setting"><span
 						class="nav_title">설정</span></a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

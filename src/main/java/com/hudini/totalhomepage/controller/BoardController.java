@@ -29,12 +29,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.hudini.totalhomepage.dto.BoardDto;
 import com.hudini.totalhomepage.dto.CategoryDto;
 import com.hudini.totalhomepage.dto.FileInfoDto;
+import com.hudini.totalhomepage.dto.PhotoDto;
 import com.hudini.totalhomepage.dto.UserDto;
 import com.hudini.totalhomepage.service.BoardService;
 /*
  * 게시판 Controller 요청에 따른 view를 리턴해줌
  * 생성날짜 : 18.06.06
- * 최종수정날짜 : 18.06.18
+ * 최종수정날짜 : 18.06.25
  * 작성자 : 김대선
  */
 
@@ -44,7 +45,10 @@ public class BoardController {
 	private String uploadPath = "/boardFile/";
 	@Autowired
 	BoardService<BoardDto> postService;
-
+	
+	@Autowired
+	BoardService<PhotoDto> photoService;
+	
 	@RequestMapping(path = { "/write" })
 	public ModelAndView writeForm(@RequestParam(name = "boardCegoryId", defaultValue = "1") int boardCategoryId,
 			ModelAndView modelAndView, HttpServletRequest request) {
@@ -53,9 +57,10 @@ public class BoardController {
 
 		if (session.getAttribute("user") != null && session.getAttribute("user") instanceof UserDto) {
 			// UserDto user = (UserDto) session.getAttribute("user");
-			List<CategoryDto> categories = postService.readCategories();
-
-			modelAndView.addObject("categories", categories);
+			List<CategoryDto> boardCategories = postService.readCategories();
+			List<CategoryDto> albumCategories = photoService.readCategories();
+			modelAndView.addObject("boardcategories", boardCategories);
+			modelAndView.addObject("albumcategories",albumCategories);
 			modelAndView.addObject("curCategory", boardCategoryId);
 			modelAndView.setViewName("writeForm");
 
@@ -113,8 +118,10 @@ public class BoardController {
 		int count = postService.viewCountPlus(id);
 		BoardDto board = postService.read(id);
 		List<FileInfoDto> boardFiles = postService.readFiles(board.getId());
-		List<CategoryDto> categories = postService.readCategories();
-		modelAndView.addObject("categories", categories);
+		List<CategoryDto> boardCategories = postService.readCategories();
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
 		modelAndView.addObject("preCategoryId", boardCegoryId);
 		modelAndView.addObject("isYourBoard",isYourBoard);
 		modelAndView.addObject("board", board);
@@ -216,14 +223,17 @@ public class BoardController {
 		int curCategoryId = boardDto.getBoardCategoryId();
 		if (session.getAttribute("user") != null && session.getAttribute("user") instanceof UserDto) {
 			UserDto user = (UserDto) session.getAttribute("user");
-			List<CategoryDto> categories = postService.readCategories();
+			List<CategoryDto> boardCategories = postService.readCategories();
+			List<CategoryDto> albumCategories = photoService.readCategories();
+			
 			
 			
 			//현재 유저와 글을쓴 유저의 id가 같으면
 			if(boardDto.getUserId() == user.getId()){
 				List<FileInfoDto> fileInfo = postService.readFiles(boardId);
 				
-				modelAndView.addObject("categories", categories);
+				modelAndView.addObject("boardcategories", boardCategories);
+				modelAndView.addObject("albumcategories",albumCategories);
 				modelAndView.addObject("curCategory", curCategoryId);
 				modelAndView.addObject("fileInfo", fileInfo);
 				modelAndView.addObject("board",boardDto);

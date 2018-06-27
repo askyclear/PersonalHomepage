@@ -36,7 +36,7 @@
 					data-toggle="dropdown" href="#"> <span class="nav_title">게시판</span>
 				</a>
 					<ul class="dropdown-menu" id="board-categories">
-						<c:forEach items="${categories }" var="category">
+						<c:forEach items="${boardcategories }" var="category">
 							<c:choose>
 								<c:when test="${category.id eq boardCategoryId }">
 									<li class="active"><a
@@ -52,9 +52,20 @@
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#"> <span class="nav_title">사진첩</span></a>
 					<ul class="dropdown-menu" id="photo-categories">
-						<li><a href="${pageContext.request.contextPath }/album">전체보기</a></li>
+						<c:forEach items="${albumcategories }" var="category">
+							<c:choose>
+								<c:when test="${category.id eq boardCategoryId }">
+									<li class="active"><a
+										href="${pageContext.request.contextPath }/album?albumCategoryId=${category.id }">${category.name }</a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath }/album?albumCategoryId=${category.id }">${category.name }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
 					</ul></li>
-				<li><a href="${pageContext.request.contextPath }"><span
+				<li><a href="${pageContext.request.contextPath }/setting"><span
 						class="nav_title">설정</span></a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -95,7 +106,7 @@
 								<div class="col-sm-6">
 									<select class="form-control" id="category-select"
 										name="boardCategoryId">
-										<c:forEach items="${categories }" var="category">
+										<c:forEach items="${boardcategories }" var="category">
 											<c:if test="${category.id != 0 }">
 												<c:choose>
 													<c:when test="${category.id eq curCategory }">
@@ -159,8 +170,10 @@
 							class="form-control-file" id="fileUpload" name="fileUpload">
 						<!-- image만 올릴때는 accept="image/png,image/jpeg" -->
 					</div>
-					<input type="submit" class="form-control btn btn-primary"
+					<input type="submit" class="form-control btn btn-info"
 						value="확인">
+						<input type="button" class="form-control btn btn-primary" id="cancleBtn"
+						value="취소">
 				</c:otherwise>
 			</c:choose>
 

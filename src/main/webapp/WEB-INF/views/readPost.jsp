@@ -36,7 +36,7 @@
 					data-toggle="dropdown" href="#"> <span class="nav_title">게시판</span>
 				</a>
 					<ul class="dropdown-menu" id="board-categories">
-						<c:forEach items="${categories }" var="category">
+						<c:forEach items="${boardcategories }" var="category">
 							<c:choose>
 								<c:when test="${category.id eq boardCategoryId }">
 									<li class="active"><a
@@ -52,7 +52,18 @@
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#"> <span class="nav_title">사진첩</span></a>
 					<ul class="dropdown-menu" id="photo-categories">
-						<li><a href="${pageContext.request.contextPath }/album">전체보기</a></li>
+						<c:forEach items="${albumcategories }" var="category">
+							<c:choose>
+								<c:when test="${category.id eq albumCategoryId }">
+									<li class="active"><a
+										href="${pageContext.request.contextPath }/album?albumCategoryId=${category.id }">${category.name }</a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath }/album?albumCategoryId=${category.id }">${category.name }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
 					</ul></li>
 				<li><a href="${pageContext.request.contextPath }"><span
 						class="nav_title">설정</span></a></li>
@@ -85,7 +96,7 @@
 								<div class="form-group row">
 									<label for="category-select" class="col-sm-4 col-form-labe">카테고리</label>
 									<div class="col-sm-6">
-										<c:forEach items="${categories }" var="category">
+										<c:forEach items="${boardcategories }" var="category">
 											<c:if test="${category.id eq board.boardCategoryId }">
 												<input type="text" readonly="readonly"
 													name="boardCategoryId" class="form-control" style="background-color:#FFFFFF"

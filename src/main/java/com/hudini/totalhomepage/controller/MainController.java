@@ -25,7 +25,7 @@ import com.hudini.totalhomepage.service.UserService;
 /*
  * Main View관련 Controller
  * 생성날짜 : 18.06.07
- * 최종수정날짜 : 18.06.18 
+ * 최종수정날짜 : 18.06.25 
  * 작성자 : 김대선
  */
 @Controller
@@ -42,7 +42,9 @@ public class MainController {
 	@RequestMapping(path = {"/main","/"})
 	public ModelAndView main(ModelAndView modelAndView){
 		List<CategoryDto> boardCategories = postService.readCategories();
-		modelAndView.addObject("categories", boardCategories);
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
 		modelAndView.setViewName("main");
 		
 		return modelAndView;
@@ -54,10 +56,12 @@ public class MainController {
 		
 		List<BoardDto> boards = postService.readList(boardCategoryId, pageNumber);
 		List<CategoryDto> boardCategories = postService.readCategories();
+		List<CategoryDto> albumCategories = photoService.readCategories();
 		int pageCount = postService.pageCount(boardCategoryId);
 		modelAndView.addObject("boardCategoryId", boardCategoryId);
 		modelAndView.addObject("boards", boards);
-		modelAndView.addObject("categories", boardCategories);
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
 		modelAndView.addObject("pageCount",pageCount);
 		modelAndView.addObject("curPage",pageNumber);
 		modelAndView.setViewName("post");
@@ -68,9 +72,17 @@ public class MainController {
 	public ModelAndView album(@RequestParam(name="albumCategoryId",defaultValue="0") int albumCategoryId,
 								@RequestParam(name="page", defaultValue="1") int pageNumber,
 									ModelAndView modelAndView){
+		List<PhotoDto> photos = photoService.readList(albumCategoryId, pageNumber);
 		List<CategoryDto> boardCategories = postService.readCategories();
-		modelAndView.addObject("categories", boardCategories);
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		int pageCount = photoService.pageCount(albumCategoryId);
+		modelAndView.addObject("albumCategoryId",albumCategoryId);
+		modelAndView.addObject("photos", photos);
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories", albumCategories);
 		modelAndView.addObject("albumCategoryId", albumCategoryId);
+		modelAndView.addObject("pageCount",pageCount);
+		modelAndView.addObject("curPage",pageNumber);
 		modelAndView.setViewName("photo");
 		return modelAndView;
 	}
@@ -82,7 +94,9 @@ public class MainController {
 	@RequestMapping(path = {"/login"})
 	public ModelAndView loginForm(ModelAndView modelAndView){
 		List<CategoryDto> boardCategories = postService.readCategories();
-		modelAndView.addObject("categories", boardCategories);
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
 		modelAndView.setViewName("loginForm");
 		return modelAndView;
 	}
@@ -129,12 +143,17 @@ public class MainController {
 	@RequestMapping(path = {"/signup"})
 	public ModelAndView signUpForm(ModelAndView modelAndView){
 		modelAndView.setViewName("signupForm");
+		List<CategoryDto> boardCategories = postService.readCategories();
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
 		return modelAndView;
 	}
 	@PostMapping(path = {"/signup/signup.do"})
 	public ModelAndView signUp(@ModelAttribute UserDto user,
 							ModelAndView modelAndView){
 		int result = userService.addUser(user);
+		
 		if(result != 1){
 			modelAndView.setViewName("signupForm");
 		}else{
@@ -146,7 +165,9 @@ public class MainController {
 	@RequestMapping(path = {"/setting"})
 	public ModelAndView setting(ModelAndView modelAndView){
 		List<CategoryDto> boardCategories = postService.readCategories();
-		modelAndView.addObject("categories", boardCategories);
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
 		modelAndView.setViewName("setting");
 		return modelAndView;
 	}

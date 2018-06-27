@@ -2,23 +2,32 @@ package com.hudini.totalhomepage.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hudini.totalhomepage.dao.AlbumDao;
 import com.hudini.totalhomepage.dto.CategoryDto;
 import com.hudini.totalhomepage.dto.FileInfoDto;
 import com.hudini.totalhomepage.dto.PhotoDto;
 import com.hudini.totalhomepage.service.BoardService;
 
 /*
- * 
+ * 게시판 글 작성 Service
+ * 작성날짜 : 2018.06.08   최종수정날짜 : 2018.06.18
+ * 작성자 : 김대선
  */
 @Service("photoService")
 public class PhotoServiceImpl implements BoardService<PhotoDto> {
-
+	@Autowired
+	AlbumDao albumDao;
 	@Override
 	public List<CategoryDto> readCategories() {
-		// TODO Auto-generated method stub
-		return null;
+		CategoryDto categoryZero = new CategoryDto();
+		categoryZero.setId(0);
+		categoryZero.setName("전체보기");
+		List<CategoryDto> categories = albumDao.selectCategories();
+		categories.add(0,categoryZero);
+		return categories;
 	}
 
 	@Override
