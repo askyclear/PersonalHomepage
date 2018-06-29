@@ -88,11 +88,11 @@
 		<c:choose>
 			<c:when test="${not empty album }">
 				<form
-					action="${pageContext.request.contextPath }/board/update/update.do"
+					action="${pageContext.request.contextPath }/album/update/update.do"
 					method="post" enctype="multipart/form-data">
 			</c:when>
 			<c:otherwise>
-				<form action="${pageContext.request.contextPath }/board/write.do"
+				<form action="${pageContext.request.contextPath }/album/write.do"
 					method="post" enctype="multipart/form-data">
 			</c:otherwise>
 		</c:choose>
@@ -105,7 +105,7 @@
 								<label for="category-select" class="col-sm-4 col-form-labe">카테고리</label>
 								<div class="col-sm-6">
 									<select class="form-control" id="category-select"
-										name="boardCategoryId">
+										name="albumCategoryId">
 										<c:forEach items="${albumcategories }" var="category">
 											<c:if test="${category.id != 0 }">
 												<c:choose>
@@ -135,13 +135,17 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td colspan="4"><label for="img" class="colsm-1 col-form-labe">사진</label>
-							<img class="form-control" id="img" name="img">
-							<input type="file"
-							class="form-control-file" id="fileUpload" name="fileUpload" accept="image/*">
+						<td colspan="4"><label for="fileUpload" class="colsm-4 col-form-labe">사진</label><br>
+							<img  id="thumb_img" name="thumb_img" >
+						
 						</td>
 					</tr>
-					
+					<tr>
+						<td colspan="4">
+							<input type="file"
+							class="form-control-file" id="fileUpload" name="fileUpload" accept="image/*" required>
+						</td>
+					</tr>
 					<tr>
 						<td colspan="4"><label for="content"
 							class="col-sm-1 col-form-labe">내용</label> <textarea
@@ -176,9 +180,31 @@
 	</div>
 	<script type="text/javascript">
 		const elFile = document.getElementById("fileUpload");
-		elFile.addEventListener("change", function() {
-			const image = evt.target.files[0];
-			// ele.src = window.URL.createObjectURL(image); 로 썸네일 보여줌;
+		elFile.addEventListener("change", function(evt) {
+			const file = evt.target.files[0];
+			var reader = new FileReader();
+			var image = new Image();
+			reader.readAsDataURL(file);
+			reader.onload = function(_file){
+				image.src = _file.target.result;
+				image.onload = function(){
+					var w = this.width,
+						h = this.height,
+						t = file.type,
+						n = file.name,
+						s = file.size;
+						const thumbImg = document.getElementById("thumb_img");
+						if(w > 1024){
+							thumbImg.style.width = "80%";
+						}
+						if(w < 100){
+							thumbImg.style.width = "50%";
+						}
+						thumbImg.src = image.src;
+						
+				}
+			}
+			
 		});
 	</script>
 	<script type="text/javascript">

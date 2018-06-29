@@ -11,10 +11,12 @@ public class PhotoDto {
 	private int id;
 	private int albumCategoryId;
 	private int userId;
+	private UserDto userInfo;
 	private String title;
 	private String content;
 	private Date createDate;
 	private Date modifyDate;
+	private String saveFileName;
 	private int viewCount;
 	public int getId() {
 		return id;
@@ -63,6 +65,20 @@ public class PhotoDto {
 	}
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
+	}
+	
+	public UserDto getUserInfo() {
+		return userInfo;
+	}
+	public void setUserInfo(UserDto userInfo) {
+		this.userInfo = userInfo;
+	}
+	
+	public String getSaveFileName() {
+		return saveFileName;
+	}
+	public void setSaveFileName(String saveFileName) {
+		this.saveFileName = saveFileName;
 	}
 	@Override
 	public String toString() {

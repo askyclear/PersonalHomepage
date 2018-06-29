@@ -37,7 +37,7 @@ public class PostServiceImpl implements BoardService<BoardDto> {
 	 */
 	@Override
 	public List<BoardDto> readList(int categoryId, int pageNumber) {
-		int start = (pageNumber - 1) * 20;
+		int start = (pageNumber - 1) * LIMIT;
 		List<BoardDto> boardList = boardDao.selectByBoardCategoryId(categoryId, start, LIMIT);
 		for (BoardDto board : boardList) {
 			int userId = board.getUserId();

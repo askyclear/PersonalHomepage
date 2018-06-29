@@ -32,6 +32,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter{
 		registry.addResourceHandler("/js/*").addResourceLocations("/WEB-INF/js/").setCachePeriod(cachePeriod);
 		registry.addResourceHandler("/fonts/*").addResourceLocations("/WEB-INF/fonts/").setCachePeriod(cachePeriod);
 		registry.addResourceHandler("/boardFile/*").addResourceLocations("/boardFile/").setCachePeriod(cachePeriod);
+		registry.addResourceHandler("/albumFile/*").addResourceLocations("/albumFile/").setCachePeriod(cachePeriod);
 	}
 
 	//

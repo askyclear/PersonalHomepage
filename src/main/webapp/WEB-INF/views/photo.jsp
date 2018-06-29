@@ -129,19 +129,51 @@
 			</div>
 			<div class="col-md-12 col-lg-10"
 				style="position: absolute; left: 220px; height: 100%;">
-				
-				<div class="row">
-					<div class="col-md-5 well">
-						<p>Some text..</p>
-						<img src="" class="img-responsive" style="width: 100%" alt="Image">
+				<ul class="col-md-4">
+				<c:forEach items="${photos }" var="photo" varStatus="status">
+				<c:if test="${status.index %3 == 0 }">
+				<li style="display:inline-block; width:100%;" >
+					<div class=" well">
+					<span>작성자:${photo.userInfo.nickname } / 조회수:${photo.viewCount }</span>
+					<img src="${pageContext.request.contextPath }${photo.saveFileName }" class="img-thumbnail" style="width: 80%" alt="Image">
+						<p>${photo.title }<br>
+							${photo.content }
+						</p>
 					</div>
-					<div class="col-md-1"></div>
-					<div class="col-md-5 well">
-						<p>Some text..</p>
-						<img src="" class="img-responsive" style="width: 100%" alt="Image">
+				</li>
+				</c:if>
+				</c:forEach>
+				</ul>
+				<ul class="col-md-4">
+				<c:forEach items="${photos }" var="photo" varStatus="status">
+				<c:if test="${status.index %3 == 1 }">
+				<li style="display:inline-block; width:100%;">
+					<div class=" well">
+					<span>작성자:${photo.userInfo.nickname } / 조회수:${photo.viewCount }</span>
+					<img src="${pageContext.request.contextPath }${photo.saveFileName }" class="img-thumbnail" style="width: 80%" alt="Image">
+						<p>${photo.title }<br>
+							${photo.content }
+						</p>
 					</div>
-					
-				</div>
+				</li>
+				</c:if>
+				</c:forEach>
+				</ul>
+				<ul class="col-md-4">
+				<c:forEach items="${photos }" var="photo" varStatus="status">
+				<c:if test="${status.index %3 == 2 }">
+				<li style="display:inline-block; width:100%;">
+					<div class=" well">
+					<span>작성자:${photo.userInfo.nickname } / 조회수:${photo.viewCount }</span>
+					<img src="${pageContext.request.contextPath }${photo.saveFileName }" class="img-thumbnail" style="width: 80%" alt="Image">
+						<p>${photo.title }<br>
+							${photo.content }
+						</p>
+					</div>
+				</li>
+				</c:if>
+				</c:forEach>
+				</ul>
 				<div class="row" >
 					<div class="col-md-11" >
 					<button style="height:38px" value="사진등록" class="btn btn-md btn-primary btn-block" onclick="window.location.href='${pageContext.request.contextPath }/album/write?albumCategoryId=${albumCategoryId }'">
