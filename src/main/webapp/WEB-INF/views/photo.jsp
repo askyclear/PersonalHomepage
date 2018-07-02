@@ -1,11 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+	table {
+	width:100%;
+	}
+</style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -104,7 +111,7 @@
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
-							
+
 						</ul>
 						<ul class="pagination">
 							<div>페이지선택</div>
@@ -129,62 +136,197 @@
 			</div>
 			<div class="col-md-12 col-lg-10"
 				style="position: absolute; left: 220px; height: 100%;">
-				<ul class="col-md-4">
-				<c:forEach items="${photos }" var="photo" varStatus="status">
-				<c:if test="${status.index %3 == 0 }">
-				<li style="display:inline-block; width:100%;" >
-					<div class=" well">
-					<span>작성자:${photo.userInfo.nickname } / 조회수:${photo.viewCount }</span>
-					<img src="${pageContext.request.contextPath }${photo.saveFileName }" class="img-thumbnail" style="width: 80%" alt="Image">
-						<p>${photo.title }<br>
-							${photo.content }
-						</p>
-					</div>
-				</li>
-				</c:if>
-				</c:forEach>
-				</ul>
-				<ul class="col-md-4">
-				<c:forEach items="${photos }" var="photo" varStatus="status">
-				<c:if test="${status.index %3 == 1 }">
-				<li style="display:inline-block; width:100%;">
-					<div class=" well">
-					<span>작성자:${photo.userInfo.nickname } / 조회수:${photo.viewCount }</span>
-					<img src="${pageContext.request.contextPath }${photo.saveFileName }" class="img-thumbnail" style="width: 80%" alt="Image">
-						<p>${photo.title }<br>
-							${photo.content }
-						</p>
-					</div>
-				</li>
-				</c:if>
-				</c:forEach>
-				</ul>
-				<ul class="col-md-4">
-				<c:forEach items="${photos }" var="photo" varStatus="status">
-				<c:if test="${status.index %3 == 2 }">
-				<li style="display:inline-block; width:100%;">
-					<div class=" well">
-					<span>작성자:${photo.userInfo.nickname } / 조회수:${photo.viewCount }</span>
-					<img src="${pageContext.request.contextPath }${photo.saveFileName }" class="img-thumbnail" style="width: 80%" alt="Image">
-						<p>${photo.title }<br>
-							${photo.content }
-						</p>
-					</div>
-				</li>
-				</c:if>
-				</c:forEach>
-				</ul>
-				<div class="row" >
-					<div class="col-md-11" >
-					<button style="height:38px" value="사진등록" class="btn btn-md btn-primary btn-block" onclick="window.location.href='${pageContext.request.contextPath }/album/write?albumCategoryId=${albumCategoryId }'">
-						<span>사진등록</span>
-					</button>
+				<div class="col-md-12 col-lg-10 photo-content">
+					<ul class="col-md-4">
+						<c:forEach items="${photos }" var="photo" varStatus="status">
+							<c:if test="${status.index %3 == 0 }">
+								<li style="display: inline-block; width: 100%;">
+									<div class=" well">
+										<table>
+										<thead>
+											<tr>
+												<td><span>번호</span></td>
+												<td><span>작성자</span></td>
+												<td><span>조회수</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											
+											<tr>
+											<td><span class="index">${photo.id }</span></td>
+											<td><span>${photo.userInfo.nickname }</span></td>
+											<td><span>${photo.viewCount }</span></td>
+											</tr>
+											<tr>
+											<td  colspan="3"><img
+											src="${pageContext.request.contextPath }${photo.saveFileName }"
+											class="img-thumbnail" style="width: 100%" alt="Image"></td></tr>
+											<tr>
+											<td colspan="3">
+											<p><b><c:if test="${fn:length(photo.title) >= 10 }">
+												${fn:substring(photo.title,0,10) }...
+											</c:if>
+											<c:if test="${fn:length(photo.title) <= 10 }">
+												${photo.title }
+											</c:if>
+										</b><br>
+											<c:if test="${fn:length(photo.content) >= 20 }">
+												${fn:substring(photo.content,0,20) }...
+											</c:if>
+											<c:if test="${fn:length(photo.content) <= 20 }">
+												${photo.content }
+											</c:if>
+										</p>
+											</td>
+											</tr>	
+										</tbody>
+										</table>
+									</div>
+								</li>
+							</c:if>
+						</c:forEach>
+					</ul>
+					<ul class="col-md-4">
+						<c:forEach items="${photos }" var="photo" varStatus="status">
+							<c:if test="${status.index %3 == 1 }">
+								<li style="display: inline-block; width: 100%;">
+									<div class=" well">
+										<table>
+										<thead>
+											<tr>
+												<td><span>번호</span></td>
+												<td><span>작성자</span></td>
+												<td><span>조회수</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											
+											<tr>
+											<td><span class="index">${photo.id }</span></td>
+											<td><span>${photo.userInfo.nickname }</span></td>
+											<td><span>${photo.viewCount }</span></td>
+											</tr>
+											<tr>
+											<td  colspan="3"><img
+											src="${pageContext.request.contextPath }${photo.saveFileName }"
+											class="img-thumbnail" style="width: 100%" alt="Image"></td></tr>
+											<tr>
+											<td colspan="3">
+											<p><b><c:if test="${fn:length(photo.title) >= 10 }">
+												${fn:substring(photo.title,0,10) }...
+											</c:if>
+											<c:if test="${fn:length(photo.title) <= 10 }">
+												${photo.title }
+											</c:if>
+										</b><br>
+											<c:if test="${fn:length(photo.content) >= 20 }">
+												${fn:substring(photo.content,0,20) }...
+											</c:if>
+											<c:if test="${fn:length(photo.content) <= 20 }">
+												${photo.content }
+											</c:if>
+										</p>
+											</td>
+											</tr>	
+										</tbody>
+										</table>
+									</div>
+								</li>
+							</c:if>
+						</c:forEach>
+					</ul>
+					<ul class="col-md-4">
+						<c:forEach items="${photos }" var="photo" varStatus="status">
+							<c:if test="${status.index %3 == 2 }">
+								<li style="display: inline-block; width: 100%;">
+									<div class=" well">
+										<table>
+										<thead>
+											<tr>
+												<td><span>번호</span></td>
+												<td><span>작성자</span></td>
+												<td><span>조회수</span></td>
+											</tr>
+										</thead>
+										<tbody>
+											
+											<tr>
+											<td><span class="index">${photo.id }</span></td>
+											<td><span>${photo.userInfo.nickname }</span></td>
+											<td><span>${photo.viewCount }</span></td>
+											</tr>
+											<tr>
+											<td  colspan="3"><img
+											src="${pageContext.request.contextPath }${photo.saveFileName }"
+											class="img-thumbnail" style="width: 100%" alt="Image"></td></tr>
+											<tr>
+											<td colspan="3">
+											<p><b><c:if test="${fn:length(photo.title) >= 10 }">
+												${fn:substring(photo.title,0,10) }...
+											</c:if>
+											<c:if test="${fn:length(photo.title) <= 10 }">
+												${photo.title }
+											</c:if>
+										</b><br>
+											<c:if test="${fn:length(photo.content) >= 20 }">
+												${fn:substring(photo.content,0,20) }...
+											</c:if>
+											<c:if test="${fn:length(photo.content) <= 20 }">
+												${photo.content }
+											</c:if>
+										</p>
+											</td>
+											</tr>	
+										</tbody>
+										</table>
+									</div>
+								</li>
+							</c:if>
+						</c:forEach>
+					</ul>
+				</div>
+				<div class="row">
+					<div class="col-md-11">
+						<button style="height: 38px" value="사진등록"
+							class="btn btn-md btn-primary btn-block"
+							onclick="window.location.href='${pageContext.request.contextPath }/album/write?albumCategoryId=${albumCategoryId }'">
+							<span>사진등록</span>
+						</button>
 					</div>
 					<div class="col-md-1"></div>
-				</div>		
+				</div>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		var photo_content = document.querySelector(".photo-content");
+		photo_content.addEventListener("click", function(evt) {
+			if(evt.target.tagName =="TD" || evt.target.tagName == "TR" || evt.target.tagName =="IMG" || evt.target.tagName =="P"){
+				var parentEle = backTrace(evt.target);
+				var id = parentEle.getElementsByClassName("index")[0].innerText;
+				window.location.href = '${pageContext.request.contextPath }'
+						+ '/album/read.do?albumIndex='
+						+ id
+						+ '&albumCategoryId='
+						+ '${albumCategoryId }';
+				
+			}
+		});
+		function backTrace(ele){
+			var childEle = ele;
+			var count = 0;
+			console.log(ele.parentElement);
+			while(count < 5){
+				if(childEle.tagName === 'DIV'){
+					count = 5;
+				}else{
+					childEle = childEle.parentElement;
+					count++;
+				}
+			};
+			return childEle;
+		}
+	</script>
 </body>
 
 </html>

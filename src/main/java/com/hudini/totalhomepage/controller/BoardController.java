@@ -225,9 +225,6 @@ public class BoardController {
 			UserDto user = (UserDto) session.getAttribute("user");
 			List<CategoryDto> boardCategories = postService.readCategories();
 			List<CategoryDto> albumCategories = photoService.readCategories();
-			
-			
-			
 			//현재 유저와 글을쓴 유저의 id가 같으면
 			if(boardDto.getUserId() == user.getId()){
 				List<FileInfoDto> fileInfo = postService.readFiles(boardId);
@@ -256,7 +253,7 @@ public class BoardController {
 	@PostMapping(path = {"/update/update.do"})
 	public ModelAndView update(ModelAndView modelAndView,
 								@ModelAttribute BoardDto board){
-		BoardDto changedDto= postService.modify(board);
+		BoardDto changedDto= postService.modify(board, 0);
 		
 		int boardId = changedDto.getId();
 		int curCategoryId = changedDto.getBoardCategoryId();

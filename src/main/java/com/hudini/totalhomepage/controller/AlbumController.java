@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,6 +100,96 @@ public class AlbumController {
 		} else {
 			return "redirect:../album?albumCategoryId=" + photo.getAlbumCategoryId();
 		}
+	}
+	@RequestMapping(path = { "/read.do" })
+	public ModelAndView read(@RequestParam(name = "albumIndex", required = true) int id,
+			@RequestParam(name = "albumCategoryId") int boardCegoryId,
+			@RequestParam(name = "isYourBoard",required=false) String isYourBoard, ModelAndView modelAndView) {
+		int count = photoService.viewCountPlus(id);
+		PhotoDto album = photoService.read(id);
+		List<FileInfoDto> albumFiles = photoService.readFiles(album.getId());
+		List<CategoryDto> boardCategories = postService.readCategories();
+		List<CategoryDto> albumCategories = photoService.readCategories();
+		modelAndView.addObject("boardcategories", boardCategories);
+		modelAndView.addObject("albumcategories",albumCategories);
+		modelAndView.addObject("preCategoryId", boardCegoryId);
+		modelAndView.addObject("isYourBoard",isYourBoard);
+		modelAndView.addObject("album", album);
+		modelAndView.addObject("albumFiles", albumFiles);
+		modelAndView.setViewName("readAlbum");
+		return modelAndView;
+	}
+	@PostMapping(path = { "/update" })
+	public ModelAndView updateForm(@RequestParam(name = "id", required = true) int albumId, ModelAndView modelAndView,
+			HttpServletRequest request, HttpServletResponse response) {
+		// session이 존재한다면 session을 없다면 null을 반환
+		HttpSession session = request.getSession();
+		PhotoDto albumDto = photoService.read(albumId);
+		int curCategoryId = albumDto.getAlbumCategoryId();
+		if (session.getAttribute("user") != null && session.getAttribute("user") instanceof UserDto) {
+			UserDto user = (UserDto) session.getAttribute("user");
+			List<CategoryDto> boardCategories = postService.readCategories();
+			List<CategoryDto> albumCategories = photoService.readCategories();
+			//현재 유저와 글을쓴 유저의 id가 같으면
+			if(albumDto.getUserId() == user.getId()){
+				List<FileInfoDto> fileInfo = photoService.readFiles(albumId);
+				
+				modelAndView.addObject("boardcategories", boardCategories);
+				modelAndView.addObject("albumcategories",albumCategories);
+				modelAndView.addObject("curCategory", curCategoryId);
+				modelAndView.addObject("fileInfo", fileInfo);
+				modelAndView.addObject("album",albumDto);
+				
+				modelAndView.setViewName("albumWriteForm");
+			}
+			//아니면 아래와 같이
+			else { 
+				modelAndView.addObject("isYourBoard", "N");
+				modelAndView.setViewName("redirect:./read.do?albumIndex=" + albumId + "&albumCategoryId=" + curCategoryId);
+			}
+
+		} else {
+			modelAndView.setViewName("redirect:../login");
+			session.setAttribute("prePage", "/album/read.do?albumIndex=" + albumId + "&albumCategoryId=" + curCategoryId);
+		}
+
+		return modelAndView;
+	}
+	@PostMapping(path = {"/update/update.do"})
+	public ModelAndView update(ModelAndView modelAndView, @RequestParam("fileUpload") MultipartFile file, 
+								@ModelAttribute PhotoDto album, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("user") != null && session.getAttribute("user") instanceof UserDto) {
+			UserDto user = (UserDto) session.getAttribute("user");
+			album.setUserId(user.getId());
+		} else {
+			album.setUserId(0);
+		}
+		int fileId = 0;
+		// 업로드 파일이 존재시 size > 0보다 클것임
+		if (file.getSize() > 0) {
+			FileInfoDto fileInfo = new FileInfoDto();
+			try {
+				String fileName = file.getOriginalFilename();
+				String contentType = file.getContentType();
+				fileInfo.setFileName(fileName);
+				fileInfo.setContentType(contentType);
+				fileInfo.setDeleteFlag(0);
+				String root_path = session.getServletContext().getRealPath("/");
+				InputStream is = file.getInputStream();
+				String savedName = uploadFile(fileName, root_path, is);
+				fileInfo.setSaveFileName(savedName);
+			} catch (Exception e) {
+				throw new RuntimeException("file save error");
+			}
+			fileId = photoService.addFile(fileInfo);
+		}
+		PhotoDto changedDto= photoService.modify(album, fileId);
+		
+		int albumId = changedDto.getId();
+		int curCategoryId = changedDto.getAlbumCategoryId();
+		modelAndView.setViewName("redirect:/album/read.do?albumIndex=" + albumId + "&albumCategoryId=" + curCategoryId);
+		return modelAndView;
 	}
 	private String uploadFile(String originalName, String root_path, InputStream is) throws IOException {
 		UUID uuid = UUID.randomUUID();

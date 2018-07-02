@@ -93,7 +93,7 @@ public class PostServiceImpl implements BoardService<BoardDto> {
 	 */
 	@Override
 	@Transactional
-	public BoardDto modify(BoardDto t) {
+	public BoardDto modify(BoardDto t, int fileId) {
 		int result = boardDao.update(t);
 		BoardDto board = new BoardDto();
 		if(result >= 1){

@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hudini.totalhomepage.dao.AlbumDao;
 import com.hudini.totalhomepage.dao.FileInfoDao;
 import com.hudini.totalhomepage.dao.UserDao;
-import com.hudini.totalhomepage.dto.BoardDto;
-import com.hudini.totalhomepage.dto.BoardFileDto;
 import com.hudini.totalhomepage.dto.CategoryDto;
 import com.hudini.totalhomepage.dto.FileInfoDto;
 import com.hudini.totalhomepage.dto.PhotoDto;
@@ -25,6 +23,7 @@ import com.hudini.totalhomepage.service.BoardService;
  * 작성자 : 김대선
  */
 @Service("photoService")
+@Transactional
 public class PhotoServiceImpl implements BoardService<PhotoDto> {
 	@Autowired
 	AlbumDao albumDao;
@@ -32,7 +31,7 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 	UserDao userDao;
 	@Autowired
 	FileInfoDao fileDao;
-	private static final int LIMIT = 10;
+	private static final int LIMIT = 9;
 	
 	/**
 	 * Album탭의 카테고리 리스트를 불러오는 메소드로 id 0 은 전체보기이다.
@@ -87,9 +86,24 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 	}
 
 	@Override
-	public PhotoDto modify(PhotoDto boardDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public PhotoDto modify(PhotoDto albumDto, int fileId) {
+		if (albumDto.getUserId() == 0) {
+			albumDto.setUserId(1);
+		}
+		albumDto.setModifyDate(new Date());
+		int result = albumDao.update(albumDto);
+		PhotoDto album = new PhotoDto();
+		if(result >= 1){
+			album = albumDao.selectById(albumDto.getId());
+		}
+		if (fileId != 0) {
+			PhotoFileDto photoFile = new PhotoFileDto();
+			photoFile.setFileId(fileId);
+			photoFile.setAlbumId(album.getId());
+			photoFile.setType("th");
+			albumDao.insertAlbumFile(photoFile);
+		}
+		return album;
 	}
 
 	@Override
@@ -147,8 +161,6 @@ public class PhotoServiceImpl implements BoardService<PhotoDto> {
 
 	@Override
 	public int viewCountPlus(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return albumDao.updateViewCountById(id);
 	}
-	
 }

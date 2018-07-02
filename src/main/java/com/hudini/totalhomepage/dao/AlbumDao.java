@@ -129,7 +129,24 @@ public class AlbumDao {
 	public List<PhotoFileDto> selectAlbumFileByAlbumId(int id) {
 		Map<String, Integer> params = new HashMap<>();
 		params.put("albumId", id);
-		return jdbc.query("SELECT * FROM album_file WHERE album_id = :albumId",params, albumFileRowMapper);
+		return jdbc.query("SELECT * FROM album_file WHERE album_id = :albumId ORDER BY file_id DESC",params, albumFileRowMapper);
+	}
+
+	public int updateViewCountById(int id) {
+		Map<String, Integer> paramMap = new HashMap<>();
+		paramMap.put("id", id);
+		return jdbc.update("UPDATE album SET view_count=view_count + 1 where id=:id", paramMap);
+	}
+
+	public int update(PhotoDto albumDto) {
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("id", albumDto.getId());
+		params.put("content", albumDto.getContent());
+		params.put("title", albumDto.getTitle());
+		params.put("modifyDate", albumDto.getModifyDate());
+		params.put("albumCategoryId", albumDto.getAlbumCategoryId());
+		return jdbc.update("UPDATE album SET title=:title, content=:content, modify_date=:modifyDate, album_category_id=:albumCategoryId WHERE id=:id", params);
 	}
 	
 }

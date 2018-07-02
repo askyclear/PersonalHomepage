@@ -136,14 +136,27 @@
 				<tbody>
 					<tr>
 						<td colspan="4"><label for="fileUpload" class="colsm-4 col-form-labe">사진</label><br>
-							<img  id="thumb_img" name="thumb_img" >
+							<img  id="thumb_img" name="thumb_img" src="${pageContext.request.contextPath }/${fileInfo[0].saveFileName} ">
 						
 						</td>
 					</tr>
+					<c:if test="${not empty album}">
+						<tr>
+						<td colspan="4">
+							<span>기존 이미지 파일 : ${fileInfo[0].fileName }</span>
+						</td>
+						
+					</tr>
+					<tr>
+						<td colspan="1">
+						<label><span>바꿀 이미지 등록</span></label>
+						</td>
+						</tr>
+					</c:if>
 					<tr>
 						<td colspan="4">
 							<input type="file"
-							class="form-control-file" id="fileUpload" name="fileUpload" accept="image/*" required>
+							class="form-control-file" id="fileUpload" name="fileUpload" accept="image/*" >
 						</td>
 					</tr>
 					<tr>
@@ -160,6 +173,8 @@
 
 			<c:choose>
 				<c:when test="${not empty album }">
+					<input type="text" style="display: none;" name="id"
+						value="${album.id }">
 					<input type="submit" class="form-control btn btn-info"
 						value="수정">
 						<input type="button" class="form-control btn btn-primary" id="cancleBtn"
@@ -206,6 +221,12 @@
 			}
 			
 		});
+		const thumb_img = document.getElementById("thumb_img");
+		if(thumb_img.width > 1024){
+			thumb_img.style.width = "100%";
+		}else if(thumb_img.width < 100){
+			thumb_img.style.width = "50%";
+		}
 	</script>
 	<script type="text/javascript">
 		const cancleBt = document.getElementById("cancleBtn");
