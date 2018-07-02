@@ -11,7 +11,7 @@
   <h2>0. 개발동기/환경</h2>
     <span>개발 IDE : Eclips-neon-3  언어 : JAVA,JSP  DBMS : MySql 5.1.45</span><br>
     <span>Spring Framework, DBCP, JSTL</span><br>
-    <span>  </span>
+    <span>개요 : </span><
     <p>'이것이 자바다', 'JSP2.3웹프로그래밍' 등의 책을 학습하면서 개발역량 향상을 위한 프로젝트로 개인 홈페이지를 제작하기로 함.</br>
     Spring Framwork의 MVC 와 DI, Intecepter, Filter의 기능을 사용해 보고 각 어노테이션을 이용한 Back-End 개발 및 포토폴리오용 홈페이지<br>
     Front-End는 부트스트랩 CSS 라이브러리를 활용하여 화면을 구성함.
